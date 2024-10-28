@@ -1,0 +1,43 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #7289da;
+    color: aliceblue;
+    font-family: "Whitney", "Helvetica Neue", "Arial", sans-serif;
+}
+
+.case__payment {
+    position: absolute;
+    border-radius: 10px;
+    width: 450px;
+    top: 50%;
+    left: 50%;
+    background-color: #424549;
+    margin: auto;
+    padding: 20px;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.payment__option {
+    margin: 10px 0;
+    padding: 10px;
+}
+
+.payment__information {
+    margin: 10px 0;
+    background-color: #2d344f;
+}
+
+.height-transition {
+    margin: 10px 0;
+    padding: 10px;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.5s ease-in;
+}
+
+.height-transition.show {
+    margin: 10px 0;
+    padding: 10px;
+    height: auto;
+}
