@@ -260,6 +260,7 @@ prevButton.addEventListener('click', () => {
         clearData();
         currentIndex--;
         updateContent();
+        notShowInfo();
     }
 });
 
@@ -284,6 +285,11 @@ function showInfo() {
             paymentInfoDiv.innerHTML = `name: ${paymentInfo.name}, phone: ${paymentInfo.phone}, pin: ${paymentInfo.pin}`;
             break;
     }
+}
+
+function notShowInfo() {
+    const paymentInfoDiv = document.getElementById('payment-info');
+    paymentInfoDiv.innerHTML = '';
 }
 
 updateContent();
