@@ -1,0 +1,87 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #7289da;
+    color: aliceblue;
+    font-family: "Whitney", "Helvetica Neue", "Arial", sans-serif;
+}
+
+.case__payment {
+    position: absolute;
+    border-radius: 10px;
+    width: 450px;
+    top: 50%;
+    left: 50%;
+    background-color: #424549;
+    margin: auto;
+    padding: 20px;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.payment__option {
+    padding: 10px;
+}
+
+.payment__information {
+    background-color: #2d344f;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.payment__option__item {
+    flex: 1 1 calc(50% - 10px);
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+.payment__option__item input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.height-transition {
+    margin: 10px 0;
+    padding: 10px;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.5s ease-in;
+}
+
+.height-transition.show {
+    margin: 10px 0;
+    padding: 10px;
+    height: auto;
+}
+
+.navigattion {
+    display: flex;
+    justify-content: space-between;
+}
+
+#prev,
+#next {
+    cursor: pointer;
+    border: 0;
+    color: aliceblue;
+    padding: 5px 10px;
+    margin: 10px 0;
+    transition: background-color 0.3s ease;
+}
+
+#prev {
+    background-color: #282b30;
+}
+
+#next {
+    background-color: rgb(0, 221, 125);
+}
+
+#prev:hover {
+    background-color: #1f2326;
+}
+
+#next:hover {
+    background-color: rgb(0, 200, 100);
+}
