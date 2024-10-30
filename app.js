@@ -268,7 +268,8 @@ nextButton.addEventListener('click', () => {
     const paymentMethod = document.querySelector('input[name="payment"]:checked');
     if (paymentMethod) {
         if (currentIndex < paymentData.length - 1) {
-            saveDataToLocalStorage();
+            if(currentIndex === 0)
+                saveDataToLocalStorage();
             currentIndex++;
             updateContent();
             showInfo();
@@ -278,7 +279,7 @@ nextButton.addEventListener('click', () => {
 
 function showInfo() {
     const storedPaymentInfo = localStorage.getItem('paymentInfo');
-    const paymentInfo = JSON.parse(storedPaymentInfo);
+    const paymentInfo = JSON.parse(storedPaymentInfo) || [];
     const paymentInfoDiv = document.getElementById('payment-info');
     switch (paymentInfo.method) {
         case 'Momo':
