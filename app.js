@@ -279,7 +279,7 @@ nextButton.addEventListener('click', () => {
 
 function showInfo() {
     const storedPaymentInfo = localStorage.getItem('paymentInfo');
-    const paymentInfo = JSON.parse(storedPaymentInfo) || [];
+    const paymentInfo = storedPaymentInfo ? JSON.parse(storedPaymentInfo) : [];
     const paymentInfoDiv = document.getElementById('payment-info');
     switch (paymentInfo.method) {
         case 'Momo':
