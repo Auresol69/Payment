@@ -63,6 +63,7 @@ const paymentData = [
             </tr>
         </tfoot>
     </table>
+    <div id="payment-info"></div>
 </div>
 `
 ];
@@ -283,14 +284,24 @@ function showInfo() {
     const paymentInfoDiv = document.getElementById('payment-info');
     switch (paymentInfo.method) {
         case 'Momo':
-            paymentInfoDiv.innerHTML = `name: ${paymentInfo.name}, phone: ${paymentInfo.phone}, pin: ${paymentInfo.pin}`;
+            paymentInfoDiv.innerHTML = `name: ${paymentInfo.name}<br>phone: ${paymentInfo.phone}<br>pin: ${paymentInfo.pin}`;
+            break;
+        case 'ATM':
+            paymentInfoDiv.innerHTML = `card number: ${paymentInfo.cardNumber}<br>expired date: ${paymentInfo.expiredDate}<br>cvc: ${paymentInfo.cvc}<br>phone: ${paymentInfo.phone}<br>pin: ${paymentInfo.pin}<br>name: ${paymentInfo.name}`;
+            break;
+        case 'Cash':
+            paymentInfoDiv.innerHTML = `phone: ${paymentInfo.phone}<br>name: ${paymentInfo.name}<br>amount: ${paymentInfo.amount}<br>note: ${paymentInfo.note}`;
+            break;
+        default:
+            paymentInfoDiv.innerHTML = '';
             break;
     }
 }
 
 function notShowInfo() {
     const paymentInfoDiv = document.getElementById('payment-info');
-    paymentInfoDiv.innerHTML = '';
+    if (paymentInfoDiv)
+        paymentInfoDiv.innerHTML = '';
 }
 
 updateContent();
