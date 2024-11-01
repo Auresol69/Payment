@@ -1,68 +1,36 @@
 const contentDiv = document.getElementById('content');
 const prevButton = document.getElementById('prev');
 const nextButton = document.getElementById('next');
+const paymentInfo = {};
 
 // Content
 const paymentData = [
     `
-            <div class="payment__option" id="payment__option">
-                <h2>How would you like to pay?</h2>
-                <br>
-                <label>
-                    <input type="radio" name="payment" value="Momo"> Momo
-                </label>
-                <label>
-                    <input type="radio" name="payment" value="ATM"> ATM
-                </label>
-                <label>
-                    <input type="radio" name="payment" value="Cash"> Cash
-                </label>
-            </div>
-            <div class="payment__information" id="payment__information">
-            </div>
+        <div class="payment__option" id="payment__option">
+            <h2>How would you like to pay?</h2>
+            <br>
+            <label>
+                <input type="radio" name="payment" value="Momo"> Momo
+            </label>
+            <label>
+                <input type="radio" name="payment" value="ATM"> ATM
+            </label>
+            <label>
+                <input type="radio" name="payment" value="Cash"> Cash
+            </label>
+        </div>
+        <div class="payment__information" id="payment__information">
+        </div>
     `,
+    `<div id="locat-delivery">
+            <h2>Where would you like to delivery?</h2>
+            <label for="location">Location delivery</label>
+            <br>
+                <input type="text" id="location" title="Please enter your location" placeholder="123/A Hau Giang Street, P11, Q6, TP.HCM">
+        </div>`,
     `<div class="receipt-container">
     <h2>Your Receipt</h2>
     <p>Thank you for your purchase!</p>
-        <table class="order-details">
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Product A</td>
-                <td>2</td>
-                <td>$10.00</td>
-                <td>$20.00</td>
-            </tr>
-            <tr>
-                <td>Product B</td>
-                <td>1</td>
-                <td>$15.00</td>
-                <td>$15.00</td>
-            </tr>
-            <!-- Add more rows as needed -->
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3"><strong>Subtotal</strong></td>
-                <td>$35.00</td>
-            </tr>
-            <tr>
-                <td colspan="3"><strong>Shipping</strong></td>
-                <td>$5.00</td>
-            </tr>
-            <tr>
-                <td colspan="3"><strong>Total</strong></td>
-                <td>$40.00</td>
-            </tr>
-        </tfoot>
-    </table>
     <div id="payment-info"></div>
 </div>
 `
@@ -194,9 +162,9 @@ function handleRadioChange(event) {
 
 function saveDataToLocalStorage() {
     const paymentMethod = document.querySelector('input[name="payment"]:checked');
-    const paymentInfo = {};
     if (paymentMethod) {
         paymentInfo.method = paymentMethod.value;
+
         switch (paymentInfo.method) {
             case 'Momo':
                 paymentInfo.phone = document.getElementById('momo_phone').value;
@@ -218,15 +186,23 @@ function saveDataToLocalStorage() {
                 paymentInfo.note = document.getElementById('cash_note').value;
                 break;
         }
-        localStorage.setItem('paymentInfo', JSON.stringify(paymentInfo));
-        console.log('Dữ liệu đã được lưu:', paymentInfo);
     }
+    if (currentIndex === 1) { // Trang nhập địa chỉ
+        const locationInput = document.getElementById('location');
+        paymentInfo.location = locationInput ? locationInput.value : ''; // Kiểm tra nếu trường có tồn tại
+    }
+
+    localStorage.setItem('paymentInfo', JSON.stringify(paymentInfo));
+    console.log('Dữ liệu đã được lưu:', paymentInfo);
 }
 
-function clearData() {
-    localStorage.removeItem('paymentInfo');
-    console.log('Dữ liệu đã được xóa');
+function getPaymentInfoFromLocalStorage() {
+    const storedPaymentInfo = localStorage.getItem('paymentInfo');
+    return storedPaymentInfo ? JSON.parse(storedPaymentInfo) : null;
+  }
 
+function clearData() {
+    getPaymentInfoFromLocalStorage();
     const momoPhone = document.getElementById('momo_phone');
     const momoName = document.getElementById('momo_name');
     const momoPin = document.getElementById('momo_pin');
@@ -240,20 +216,36 @@ function clearData() {
     const cashName = document.getElementById('cash_name');
     const cashAmount = document.getElementById('cash_amount');
     const cashNote = document.getElementById('cash_note');
+    
+    if (currentIndex === 1){
+        for (let key in paymentInfo) {
+            delete paymentInfo[key];
+        }
+        localStorage.removeItem('paymentInfo');
+        if (momoPhone) momoPhone.value = '';
+        if (momoName) momoName.value = '';
+        if (momoPin) momoPin.value = '';
+        if (atmCardNumber) atmCardNumber.value = '';
+        if (atmExpiredDate) atmExpiredDate.value = '';
+        if (atmCvc) atmCvc.value = '';
+        if (atmPhone) atmPhone.value = '';
+        if (atmPin) atmPin.value = '';
+        if (atmName) atmName.value = '';
+        if (cashPhone) cashPhone.value = '';
+        if (cashName) cashName.value = '';
+        if (cashAmount) cashAmount.value = '';
+        if (cashNote) cashNote.value = '';
+    }
+    
+    if (currentIndex===2) {
+        delete paymentInfo.location;
+        const locationInput = document.getElementById('location');
+        if (locationInput) locationInput.value = '';
+    }
 
-    if (momoPhone) momoPhone.value = '';
-    if (momoName) momoName.value = '';
-    if (momoPin) momoPin.value = '';
-    if (atmCardNumber) atmCardNumber.value = '';
-    if (atmExpiredDate) atmExpiredDate.value = '';
-    if (atmCvc) atmCvc.value = '';
-    if (atmPhone) atmPhone.value = '';
-    if (atmPin) atmPin.value = '';
-    if (atmName) atmName.value = '';
-    if (cashPhone) cashPhone.value = '';
-    if (cashName) cashName.value = '';
-    if (cashAmount) cashAmount.value = '';
-    if (cashNote) cashNote.value = '';
+
+    console.log('Dữ liệu đã được xóa');
+    console.log('Dữ liệu còn lại:', paymentInfo);
 }
 
 prevButton.addEventListener('click', () => {
@@ -263,19 +255,18 @@ prevButton.addEventListener('click', () => {
         updateContent();
         notShowInfo();
     }
+    console.log(currentIndex);
 });
 
 nextButton.addEventListener('click', () => {
-    const paymentMethod = document.querySelector('input[name="payment"]:checked');
-    if (paymentMethod) {
         if (currentIndex < paymentData.length - 1) {
-            if(currentIndex === 0)
-                saveDataToLocalStorage();
+            saveDataToLocalStorage();
             currentIndex++;
             updateContent();
+            if (currentIndex === 2)
             showInfo();
-        }
     }
+    console.log(currentIndex);
 });
 
 function showInfo() {
@@ -284,13 +275,13 @@ function showInfo() {
     const paymentInfoDiv = document.getElementById('payment-info');
     switch (paymentInfo.method) {
         case 'Momo':
-            paymentInfoDiv.innerHTML = `name: ${paymentInfo.name}<br>phone: ${paymentInfo.phone}<br>pin: ${paymentInfo.pin}`;
+            paymentInfoDiv.innerHTML = `name: ${paymentInfo.name}<br>phone: ${paymentInfo.phone}<br>pin: ${paymentInfo.pin}<br>location: ${paymentInfo.location}`;
             break;
         case 'ATM':
-            paymentInfoDiv.innerHTML = `card number: ${paymentInfo.cardNumber}<br>expired date: ${paymentInfo.expiredDate}<br>cvc: ${paymentInfo.cvc}<br>phone: ${paymentInfo.phone}<br>pin: ${paymentInfo.pin}<br>name: ${paymentInfo.name}`;
+            paymentInfoDiv.innerHTML = `card number: ${paymentInfo.cardNumber}<br>expired date: ${paymentInfo.expiredDate}<br>cvc: ${paymentInfo.cvc}<br>phone: ${paymentInfo.phone}<br>pin: ${paymentInfo.pin}<br>name: ${paymentInfo.name}<br>location: ${paymentInfo.location}`;
             break;
         case 'Cash':
-            paymentInfoDiv.innerHTML = `phone: ${paymentInfo.phone}<br>name: ${paymentInfo.name}<br>amount: ${paymentInfo.amount}<br>note: ${paymentInfo.note}`;
+            paymentInfoDiv.innerHTML = `phone: ${paymentInfo.phone}<br>name: ${paymentInfo.name}<br>amount: ${paymentInfo.amount}<br>note: ${paymentInfo.note}<br>location: ${paymentInfo.location}`;
             break;
         default:
             paymentInfoDiv.innerHTML = '';
