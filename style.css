@@ -29,6 +29,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    overflow: auto;
 }
 
 .payment__option__item {
@@ -40,6 +41,8 @@ body {
 .payment__option__item input {
     padding: 8px;
     border: 1px solid #ccc;
+    color:#fff;
+    background-color: #1e2124;
 }
 
 .height-transition {
@@ -141,7 +144,7 @@ body {
     color: #333;
 }
 
-#locat-delivery h2{
+#locat-delivery h2 {
     color: aliceblue;
     padding: 10px;
 }
@@ -149,4 +152,10 @@ body {
 #locat-delivery input {
     padding: 8px;
     border: 1px solid #ccc;
+    color: #fff;
+    background-color: #1e2124;
+}
+
+.error-message{
+    color: rgb(215, 0, 0);
 }
