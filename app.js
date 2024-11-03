@@ -70,7 +70,7 @@ function handleRadioChange(event) {
                             <label for="momo_phone">Phone number</label>
                             <input type="text" name="momo_phone" id="momo_phone" inputmode="numeric" pattern="[0-9]*"
                                 title="Please enter Phone number" placeholder="Number" required
-                                oninput="this.value = this.value.replace(/[^0-9]/g,'')" maxlength="11">
+                                oninput="this.value = this.value.replace(/[^0-9]/g,'')" maxlength="10">
                             <div class="error-message" id="error-momo_phone"></div>
                         </div>
                         <div class="payment__option__item">
@@ -115,7 +115,7 @@ function handleRadioChange(event) {
                             <label for="atm_phone">Phone number</label>
                             <input type="text" name="atm_phone" id="atm_phone" inputmode="numeric" pattern="[0-9]*"
                                 title="Please enter Phone number" placeholder="Number" required
-                                oninput="this.value = this.value.replace(/[^0-9]/g,'')" maxlength="11">
+                                oninput="this.value = this.value.replace(/[^0-9]/g,'')" maxlength="10">
                         <div class="error-message" id="error-atm_phone"></div>
                                 </div>
                         <div class="payment__option__item">
@@ -139,7 +139,7 @@ function handleRadioChange(event) {
                             <label for="cash_phone">Phone number</label>
                             <input type="text" name="cash_phone" id="cash_phone" inputmode="numeric" pattern="[0-9]*"
                                 title="Please enter Phone number" placeholder="Number" required
-                                oninput="this.value = this.value.replace(/[^0-9]/g,'')" maxlength="11">
+                                oninput="this.value = this.value.replace(/[^0-9]/g,'')" maxlength="10">
                         <div class="error-message" id="error-cash_phone"></div>                        
                         </div>
                         <div class="payment__option__item">
@@ -321,8 +321,8 @@ function validateInputs() {
             const momoName = document.getElementById('momo_name');
             const momoPin = document.getElementById('momo_pin');
             
-           if (momoPhone && momoPhone.value === '') {
-    document.getElementById('error-momo_phone').innerText = 'Phone number is required';
+            if (momoPhone && (momoPhone.value === '' || momoPhone.value.length !==10)) {
+    document.getElementById('error-momo_phone').innerText = 'Vietnamese phone numbers need 10 digits';
     document.getElementById('error-momo_phone').style.display = 'block';
     isValid = false;
 } else if (momoPhone) {
