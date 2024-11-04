@@ -31,17 +31,20 @@ const paymentData = [
         <div class="error-message" id="error-locat-delivery"></div>
 `,
     `<div class="receipt-container">
-    <h2>Your Receipt</h2>
-    <p>Thank you for your purchase!</p>
+    <h2>Payment Detail</h2>
     <div id="payment-info"></div>
 </div>
-`
+`, `<div class="thank-you">
+<h2>Thank you for your purchase <i class="fa-solid fa-circle-check"></i></h2>
+<br>
+<h3>Transaction Complete!</h3></div>`
 ];
 
 let currentIndex = 0;
 
 function updateContent() {
     contentDiv.innerHTML = paymentData[currentIndex];
+
 
     const radios = document.getElementsByName('payment');
 
@@ -209,6 +212,7 @@ function getPaymentInfoFromLocalStorage() {
 
 function clearData() {
     getPaymentInfoFromLocalStorage();
+
     const momoPhone = document.getElementById('momo_phone');
     const momoName = document.getElementById('momo_name');
     const momoPin = document.getElementById('momo_pin');
@@ -258,40 +262,82 @@ prevButton.addEventListener('click', () => {
         currentIndex--;
         updateContent();
         notShowInfo();
+        if (currentIndex === 2)
+            showInfo();
     }
     console.log(currentIndex);
 });
 
 nextButton.addEventListener('click', () => {
-    if (validateInputs()){ if (currentIndex < paymentData.length - 1) {
-        saveDataToLocalStorage();
-        currentIndex++;
-        updateContent();
-        if (currentIndex === 2)
-            showInfo();
+    if (validateInputs()) {
+        if (currentIndex < paymentData.length - 1) {
+            saveDataToLocalStorage();
+            currentIndex++;
+            updateContent();
+            if (currentIndex === 2)
+                showInfo();
+        }
+        console.log(currentIndex);
     }
-    console.log(currentIndex);}
 });
 
 function showInfo() {
     const storedPaymentInfo = localStorage.getItem('paymentInfo');
     const paymentInfo = storedPaymentInfo ? JSON.parse(storedPaymentInfo) : [];
     const paymentInfoDiv = document.getElementById('payment-info');
+
+    if (!paymentInfo.method) {
+        paymentInfoDiv.innerHTML = '';
+        return;
+    }
+
+    let content = '';
     switch (paymentInfo.method) {
         case 'Momo':
-            paymentInfoDiv.innerHTML = `name: ${paymentInfo.name}<br>phone: ${paymentInfo.phone}<br>pin: ${paymentInfo.pin}<br>location: ${paymentInfo.location}`;
+            content += `
+                <div class="col-md-6 col-payment">
+                    <p><strong>Payment method:</strong> ${paymentInfo.method}</p>
+                    <p><strong>Name:</strong> ${paymentInfo.name}</p>
+                    <p><strong>Phone:</strong> ${paymentInfo.phone}</p>
+                    <p><strong>PIN:</strong> ${paymentInfo.pin}</p>
+                    <p><strong>Location:</strong> ${paymentInfo.location}</p>
+                </div>
+            `;
             break;
         case 'ATM':
-            paymentInfoDiv.innerHTML = `card number: ${paymentInfo.cardNumber}<br>expired date: ${paymentInfo.expiredDate}<br>cvc: ${paymentInfo.cvc}<br>phone: ${paymentInfo.phone}<br>pin: ${paymentInfo.pin}<br>name: ${paymentInfo.name}<br>location: ${paymentInfo.location}`;
+            content += `
+                <div class="col-md-6 col-payment">
+                    <p><strong>Payment method:</strong> ${paymentInfo.method}</p>
+                    <p><strong>Card number:</strong> ${paymentInfo.cardNumber}</p>
+                    <p><strong>Expired date:</strong> ${paymentInfo.expiredDate}</p>
+                    <p><strong>CVC:</strong> ${paymentInfo.cvc}</p>
+                    <p><strong>Phone:</strong> ${paymentInfo.phone}</p>
+                    <p><strong>PIN:</strong> ${paymentInfo.pin}</p>
+                    <p><strong>Name:</strong> ${paymentInfo.name}</p>
+                    <p><strong>Location:</strong> ${paymentInfo.location}</p>
+                </div>
+            `;
             break;
         case 'Cash':
-            paymentInfoDiv.innerHTML = `phone: ${paymentInfo.phone}<br>name: ${paymentInfo.name}<br>amount: ${paymentInfo.amount}<br>note: ${paymentInfo.note}<br>location: ${paymentInfo.location}`;
+            content += `
+                <div class="col-md-6 col-payment">
+                    <p><strong>Payment method:</strong> ${paymentInfo.method}</p>
+                    <p><strong>Phone:</strong> ${paymentInfo.phone}</p>
+                    <p><strong>Name:</strong> ${paymentInfo.name}</p>
+                    <p><strong>Amount:</strong> ${paymentInfo.amount}</p>
+                    <p><strong>Note:</strong> ${paymentInfo.note}</p>
+                    <p><strong>Location:</strong> ${paymentInfo.location}</p>
+                </div>
+            `;
             break;
         default:
-            paymentInfoDiv.innerHTML = '';
+            content = '';
             break;
     }
+
+    paymentInfoDiv.innerHTML = content;
 }
+
 
 function notShowInfo() {
     const paymentInfoDiv = document.getElementById('payment-info');
@@ -309,9 +355,8 @@ function validateInputs() {
         document.getElementById('error-locat-delivery').style.display = 'block';
         return false;
     }
-    
-    else if (locatDelivery)
-    {
+
+    else if (locatDelivery) {
         document.getElementById('error-locat-delivery').style.display = 'none';
         return true;
     }
@@ -320,31 +365,31 @@ function validateInputs() {
             const momoPhone = document.getElementById('momo_phone');
             const momoName = document.getElementById('momo_name');
             const momoPin = document.getElementById('momo_pin');
-            
-            if (momoPhone && (momoPhone.value === '' || momoPhone.value.length !==10)) {
-    document.getElementById('error-momo_phone').innerText = 'Vietnamese phone numbers need 10 digits';
-    document.getElementById('error-momo_phone').style.display = 'block';
-    isValid = false;
-} else if (momoPhone) {
-    document.getElementById('error-momo_phone').style.display = 'none';
-           }
 
-if (momoName && momoName.value === '') {
-    document.getElementById('error-momo_name').innerText = 'Name is required';
-    document.getElementById('error-momo_name').style.display = 'block';
-    isValid = false;
-} else if (momoName) {
-    document.getElementById('error-momo_name').style.display = 'none';
-   
-}
+            if (momoPhone && (momoPhone.value === '' || momoPhone.value.length !== 10)) {
+                document.getElementById('error-momo_phone').innerText = 'Vietnamese phone numbers need 10 digits';
+                document.getElementById('error-momo_phone').style.display = 'block';
+                isValid = false;
+            } else if (momoPhone) {
+                document.getElementById('error-momo_phone').style.display = 'none';
+            }
 
-if (momoPin && (momoPin.value === '' || momoPin.value.length < 6)) {
-    document.getElementById('error-momo_pin').innerText = 'Pin code must be 6 digits';
-    document.getElementById('error-momo_pin').style.display = 'block';
-    isValid = false;
-} else if (momoPin) {
-    document.getElementById('error-momo_pin').style.display = 'none';
-}
+            if (momoName && momoName.value === '') {
+                document.getElementById('error-momo_name').innerText = 'Name is required';
+                document.getElementById('error-momo_name').style.display = 'block';
+                isValid = false;
+            } else if (momoName) {
+                document.getElementById('error-momo_name').style.display = 'none';
+
+            }
+
+            if (momoPin && (momoPin.value === '' || momoPin.value.length < 6)) {
+                document.getElementById('error-momo_pin').innerText = 'Pin code must be 6 digits';
+                document.getElementById('error-momo_pin').style.display = 'block';
+                isValid = false;
+            } else if (momoPin) {
+                document.getElementById('error-momo_pin').style.display = 'none';
+            }
             return isValid;
         case 'ATM':
             const atmCardNumber = document.getElementById('atm_card_number');
@@ -353,73 +398,73 @@ if (momoPin && (momoPin.value === '' || momoPin.value.length < 6)) {
             const atmPhone = document.getElementById('atm_phone');
             const atmPin = document.getElementById('atm_pin');
             const atmName = document.getElementById('atm_name');
-    if (atmCardNumber && atmCardNumber.value === '') {
-    document.getElementById('error-atm_card_number').innerText = 'Card number is required';
-    document.getElementById('error-atm_card_number').style.display = 'block';
-    isValid = false;
-} else if (atmCardNumber) {
-    document.getElementById('error-atm_card_number').style.display = 'none';
-}
+            if (atmCardNumber && atmCardNumber.value === '') {
+                document.getElementById('error-atm_card_number').innerText = 'Card number is required';
+                document.getElementById('error-atm_card_number').style.display = 'block';
+                isValid = false;
+            } else if (atmCardNumber) {
+                document.getElementById('error-atm_card_number').style.display = 'none';
+            }
 
-if (atmExpiredDate && atmExpiredDate.value === '') {
-    document.getElementById('error-atm_expired_date').innerText = 'Expired date is required';
-    document.getElementById('error-atm_expired_date').style.display = 'block';
-    isValid = false;
-} else if (atmExpiredDate) { 
-    document.getElementById('error-atm_expired_date').style.display = 'none';
-}
+            if (atmExpiredDate && atmExpiredDate.value === '') {
+                document.getElementById('error-atm_expired_date').innerText = 'Expired date is required';
+                document.getElementById('error-atm_expired_date').style.display = 'block';
+                isValid = false;
+            } else if (atmExpiredDate) {
+                document.getElementById('error-atm_expired_date').style.display = 'none';
+            }
 
-if (atmCvc && (atmCvc.value === '' || atmCvc.value.length < 3)) {
-    document.getElementById('error-atm_cvc').innerText = 'CVC must be at least 3 digits';
-    document.getElementById('error-atm_cvc').style.display = 'block';
-    isValid = false;
-} else if (atmCvc) {
-    document.getElementById('error-atm_cvc').style.display = 'none';
-}
+            if (atmCvc && (atmCvc.value === '' || atmCvc.value.length < 3)) {
+                document.getElementById('error-atm_cvc').innerText = 'CVC must be at least 3 digits';
+                document.getElementById('error-atm_cvc').style.display = 'block';
+                isValid = false;
+            } else if (atmCvc) {
+                document.getElementById('error-atm_cvc').style.display = 'none';
+            }
 
-if (atmPhone && atmPhone.value === '') {
-    document.getElementById('error-atm_phone').innerText = 'Phone number is required';
-    document.getElementById('error-atm_phone').style.display = 'block';
-    isValid = false;
-} else if (atmPhone) {
-    document.getElementById('error-atm_phone').style.display = 'none';
-}
+            if (atmPhone && atmPhone.value === '') {
+                document.getElementById('error-atm_phone').innerText = 'Phone number is required';
+                document.getElementById('error-atm_phone').style.display = 'block';
+                isValid = false;
+            } else if (atmPhone) {
+                document.getElementById('error-atm_phone').style.display = 'none';
+            }
 
-if (atmPin && (atmPin.value === '' || atmPin.value.length < 6)) {
-    document.getElementById('error-atm_pin').innerText = 'Pin code must be 6 digits';
-    document.getElementById('error-atm_pin').style.display = 'block';
-    isValid = false;
-} else if (atmPin) {
-    document.getElementById('error-atm_pin').style.display = 'none';
-}
+            if (atmPin && (atmPin.value === '' || atmPin.value.length < 6)) {
+                document.getElementById('error-atm_pin').innerText = 'Pin code must be 6 digits';
+                document.getElementById('error-atm_pin').style.display = 'block';
+                isValid = false;
+            } else if (atmPin) {
+                document.getElementById('error-atm_pin').style.display = 'none';
+            }
 
-if (atmName && atmName.value === '') {
-    document.getElementById('error-atm_name').innerText = 'Name is required';
-    document.getElementById('error-atm_name').style.display = 'block';
-    isValid = false;
-} else if (atmName) {
-    document.getElementById('error-atm_name').style.display = 'none';
-}
+            if (atmName && atmName.value === '') {
+                document.getElementById('error-atm_name').innerText = 'Name is required';
+                document.getElementById('error-atm_name').style.display = 'block';
+                isValid = false;
+            } else if (atmName) {
+                document.getElementById('error-atm_name').style.display = 'none';
+            }
             return isValid;
         case 'Cash':
             const cashPhone = document.getElementById('cash_phone');
             const cashName = document.getElementById('cash_name');
-    
-if (cashPhone && cashPhone.value === '') {
-    document.getElementById('error-cash_phone').innerText = 'Phone number is required';
-    document.getElementById('error-cash_phone').style.display = 'block';
-    isValid = false;
-} else if (cashPhone) {
-    document.getElementById('error-cash_phone').style.display = 'none';
-}
 
-if (cashName && cashName.value === '') {
-    document.getElementById('error-cash_name').innerText = 'Name is required';
-    document.getElementById('error-cash_name').style.display = 'block';
-    isValid = false;
-} else if (cashName) {
-    document.getElementById('error-cash_name').style.display = 'none';
+            if (cashPhone && cashPhone.value === '') {
+                document.getElementById('error-cash_phone').innerText = 'Phone number is required';
+                document.getElementById('error-cash_phone').style.display = 'block';
+                isValid = false;
+            } else if (cashPhone) {
+                document.getElementById('error-cash_phone').style.display = 'none';
             }
-                        return isValid;
-    }    
+
+            if (cashName && cashName.value === '') {
+                document.getElementById('error-cash_name').innerText = 'Name is required';
+                document.getElementById('error-cash_name').style.display = 'block';
+                isValid = false;
+            } else if (cashName) {
+                document.getElementById('error-cash_name').style.display = 'none';
+            }
+            return isValid;
+    }
 }
