@@ -41,7 +41,7 @@ body {
 .payment__option__item input {
     padding: 8px;
     border: 1px solid #ccc;
-    color:#fff;
+    color: #fff;
     background-color: #1e2124;
 }
 
@@ -154,6 +154,27 @@ body {
     background-color: #1e2124;
 }
 
-.error-message{
+.error-message {
     color: rgb(215, 0, 0);
+}
+
+.fa-circle-check {
+    color: rgb(0, 221, 125);
+}
+
+.thank-you {
+    padding: 10px;
+}
+
+.col-payment {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+.col-payment p {
+    margin: 5px 0;
 }
