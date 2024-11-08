@@ -324,7 +324,6 @@ function showInfo() {
                     <p><strong>Payment method:</strong> ${paymentInfo.method}</p>
                     <p><strong>Phone:</strong> ${paymentInfo.phone}</p>
                     <p><strong>Name:</strong> ${paymentInfo.name}</p>
-                    <p><strong>Amount:</strong> ${paymentInfo.amount}</p>
                     <p><strong>Note:</strong> ${paymentInfo.note}</p>
                     <p><strong>Location:</strong> ${paymentInfo.location}</p>
                 </div>
